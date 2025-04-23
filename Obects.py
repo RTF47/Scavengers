@@ -41,4 +41,4 @@ class Ground():
 
 
     def draw(self):
-        pygame.draw.rect(self.screen, (0,0,0), self.rect)
+        pygame.draw.rect(self.screen, (45,175,20), self.rect)
