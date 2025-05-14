@@ -1,9 +1,12 @@
-# pyGame
-*Done: Map-Leveling*
-*Done: Player*
-*Done: Camera*
-*Done: Player Animations*
-*Done: Graphics*
-*Done: Weapons*
+# Buccaneers
 
-*WIP*: UI
+## Completed Tasks
+- [x] Map-Leveling  
+- [x] Player  
+- [x] Camera  
+- [x] Player Animations  
+- [x] Graphics  
+- [x] Weapons  
+
+## Work in Progress
+- [ ] UI
