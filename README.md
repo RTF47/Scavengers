@@ -8,9 +8,10 @@
 - [x] Graphics  
 - [x] Weapons  
 - [x] Enemy
+- [x] UI
+- [x] Interactions
+- [x] Particles
       
 ## Work in Progress
-- [ ] UI
-- [ ] Interactions
-- [ ] Particles
+- [ ] Leaderboard
       
