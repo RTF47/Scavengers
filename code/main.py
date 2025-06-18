@@ -3,7 +3,7 @@ import pygame, sys, json, os
 from settings import *
 from level import Level
 from timer import Timer                 # добавили импорт таймера
-from leaderboard import Leaderboard
+from leaderboard2 import Leaderboard
 
 
 class Game:
