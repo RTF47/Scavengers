@@ -155,7 +155,15 @@ class YSortCameraGroup(pygame.sprite.Group):
 
 
     def custom_draw(self, player):
-
+        """Расчет смещения камеры:
+            Камера центрируется на игроке, вычисляя разницу между позицией игрока (player.rect.centerx/y) и половиной размеров экрана (self.half_width/height)
+            Результат сохраняется в вектор self.offset
+            Отрисовка фона:
+            Позиция фона корректируется с учетом смещения камеры
+            Фон рисуется через blit() с вычисленной позицией
+            Отрисовка спрайтов с Y-sorting:
+            Спрайты сортируются по их Y-координате (центру по вертикали) для имитации глубины
+            Каждый спрайт рисуется с учетом смещения камеры"""
         #Расчет смещения камеры
         self.offset.x = player.rect.centerx - self.half_width
         self.offset.y = player.rect.centery - self.half_height
