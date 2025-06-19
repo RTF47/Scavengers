@@ -11,7 +11,6 @@
 - [x] UI
 - [x] Interactions
 - [x] Particles
-      
-## Work in Progress
-- [ ] Leaderboard
+- [x] Leaderboard 
+
       
