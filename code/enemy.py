@@ -41,18 +41,18 @@ class Enemy(Entity):
         # Переменные, применяемые для расчёта получения/не получения и нанесения урона
         self.can_attack = True
         self.attack_time = None
-        self.attack_cooldown = 400
+        self.attack_cooldown = ATTACK_CD
         self.damage_player = damage_player
         self.trigger_death_particles = trigger_death_particels
         self.vulnerable = True
         self.hit_time = None
-        self.invincibility_duration = 300
+        self.invincibility_duration = INVICIBILITY_DUR
 
         #Звуки
         self.attack_sound = pygame.mixer.Sound(monster_info['attack_sound'])
-        self.death_sound = pygame.mixer.Sound('../audio/death.wav')
-        self.hit_sound = pygame.mixer.Sound('../audio/hit.wav')
-        self.enemy_sound_volume = 0.1
+        self.death_sound = pygame.mixer.Sound(DEATH_S)
+        self.hit_sound = pygame.mixer.Sound(HIT_S)
+        self.enemy_sound_volume = ENEMY_V
         self.attack_sound.set_volume(self.enemy_sound_volume)
         self.death_sound.set_volume(self.enemy_sound_volume)
         self.hit_sound.set_volume(self.enemy_sound_volume)
@@ -94,7 +94,7 @@ class Enemy(Entity):
         distance = self.get_player_distance_direction(player)[0]
         if distance <= self.attack_radius and self.can_attack:
             if self.status != 'attack':
-                self.frame_index = 0
+                self.frame_index = FRAME_IND
             self.status = 'attack'
         elif distance <= self.notice_radius:
             self.status = 'move'
@@ -124,7 +124,7 @@ class Enemy(Entity):
         if self.frame_index >= len(animation):
             if self.status == 'attack':
                 self.can_attack = False
-            self.frame_index = 0
+            self.frame_index = FRAME_IND
         self.image = animation[int(self.frame_index)]
         self.rect = self.image.get_rect(center = self.hitbox.center)
 

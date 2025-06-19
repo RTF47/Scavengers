@@ -20,22 +20,22 @@ class UI:
             current_health: Текущее количество ХП.
             total_health: Общее количество ХП.
         """
-        full_heart = pygame.image.load("../graphics/HP/OneHeart.png").convert_alpha()
-        full_heart = pygame.transform.scale(full_heart, (25,24))
-        empty_heart = pygame.image.load("../graphics/HP/VoidHeart.png").convert_alpha()
-        empty_heart = pygame.transform.scale(empty_heart, (25,24))
+        full_heart = pygame.image.load(F_HEART).convert_alpha()
+        full_heart = pygame.transform.scale(full_heart, HEART_SIZE)
+        empty_heart = pygame.image.load(E_HEART).convert_alpha()
+        empty_heart = pygame.transform.scale(empty_heart, HEART_SIZE)
 
         # Сколько всего сердечек
         self.total_hearts = total_health
 
         # Задаём начальные координаты для отрисовки (слева сверху)
-        start_x = 10
-        start_y = 15
+        start_x = HEART_POS[0]
+        start_y = HEART_POS[1]
 
         # Отрисовываем каждое сердечко
         for i in range(self.total_hearts):
             # Вычисляем позицию сердечка (по горизонтали друг за другом)
-            heart_x = start_x + i * (full_heart.get_width() + 5)
+            heart_x = start_x + i * (full_heart.get_width() + HEART_GAP)
             heart_pos = (heart_x, start_y)
 
             if i < current_health:
@@ -55,11 +55,11 @@ class UI:
         """
         bg_rect = pygame.Rect(left, top, ITEM_BOX_SIZE, ITEM_BOX_SIZE)
         pygame.draw.rect(self.display_surface, UI_BG_COLOR, bg_rect)
-        pygame.draw.rect(self.display_surface, UI_BORDER_COLOR, bg_rect, 3)
+        pygame.draw.rect(self.display_surface, UI_BORDER_COLOR, bg_rect, SBOX_WIDTH)
         if has_changed:
-            pygame.draw.rect(self.display_surface, UI_BORDER_COLOR_ACTIVE, bg_rect, 3)
+            pygame.draw.rect(self.display_surface, UI_BORDER_COLOR_ACTIVE, bg_rect, SBOX_WIDTH)
         else:
-            pygame.draw.rect(self.display_surface, UI_BORDER_COLOR, bg_rect, 3)
+            pygame.draw.rect(self.display_surface, UI_BORDER_COLOR, bg_rect, SBOX_WIDTH)
         return bg_rect
 
 
@@ -69,7 +69,7 @@ class UI:
             weapon_status: Статус оружия.
             has_changed: Поменял ли оружие.
         """
-        bg_rect = self.selection_box(10,630, has_changed)
+        bg_rect = self.selection_box(WEAPON_POS[0],WEAPON_POS[1], has_changed)
         weapon_surf = self.weapon_graphics[weapon_status]
         weapon_rect = weapon_surf.get_rect(center = bg_rect.center)
         self.display_surface.blit(weapon_surf,weapon_rect)
@@ -80,13 +80,13 @@ class UI:
         Args:
             player: Игрок.
         """
-        light_image = pygame.image.load("../graphics/runes/1-32x32.png").convert_alpha()
-        grey_img = pygame.image.load("../graphics/runes/dark1-32x32.png").convert_alpha()
+        light_image = pygame.image.load(RUNE_PATH).convert_alpha()
+        grey_img = pygame.image.load(E_RUNE_PATH).convert_alpha()
 
         if player.has_rune:
-            self.display_surface.blit(light_image, (200, 10))
+            self.display_surface.blit(light_image, RUNE_UI_POS)
         else:
-            self.display_surface.blit(grey_img, (200, 10))
+            self.display_surface.blit(grey_img, RUNE_UI_POS)
 
 
     def display(self,player):

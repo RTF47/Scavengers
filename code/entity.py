@@ -1,5 +1,7 @@
 import pygame
 from math import sin
+from settings import *
+
 
 class Entity(pygame.sprite.Sprite):
     def __init__(self,groups):
@@ -8,8 +10,8 @@ class Entity(pygame.sprite.Sprite):
             groups: Группы, которые наследует класс.
         """
         super().__init__(groups)
-        self.frame_index = 0
-        self.frame_animation_speed = 0.15
+        self.frame_index = FRAME_IND
+        self.frame_animation_speed = FRAME_SPEED
         self.direction = pygame.math.Vector2()
 
 

@@ -1,5 +1,5 @@
 import pygame
-
+from settings import *
 
 class Rune(pygame.sprite.Sprite):
     def __init__(self, x, y, player):
@@ -10,11 +10,11 @@ class Rune(pygame.sprite.Sprite):
             player: Игрок.
         """
         super().__init__()
-        self.image = pygame.image.load('../graphics/runes/1-32x32.png').convert_alpha()
+        self.image = pygame.image.load(RUNE_PATH).convert_alpha()
         self.image = pygame.transform.scale(self.image, (48, 48))
         self.rect = self.image.get_rect(center=(x, y))
-        self.magnet_radius = 100  # радиус притяжения
-        self.magnet_speed = 3
+        self.magnet_radius = RUNE_RADIUS  # радиус притяжения
+        self.magnet_speed = RUNE_SPEED
         self.player = player
 
 

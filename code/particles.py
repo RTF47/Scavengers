@@ -1,6 +1,7 @@
 import pygame
+
+from settings import *
 from support import import_folder
-from random import choice
 
 class AnimationPlayer:
     """Импорт спрайтов для анимации партиклов"""
@@ -8,17 +9,17 @@ class AnimationPlayer:
         #Импорт всех спрайтов для создания анимации партикла
         self.frames = {
             # attacks
-            'claw': import_folder('../graphics/particles/claw'),
-            'slash': import_folder('../graphics/particles/slash'),
-            'sparkle': import_folder('../graphics/particles/sparkle'),
-            'leaf_attack': import_folder('../graphics/particles/leaf_attack'),
-            'thunder': import_folder('../graphics/particles/thunder'),
+            'claw': import_folder(CLAW_F),
+            'slash': import_folder(SLASH_F),
+            'sparkle': import_folder(SPARKLE_F),
+            'leaf_attack': import_folder(LEAF_F),
+            'thunder': import_folder(THENDER_F),
 
             # monster deaths
-            'squid': import_folder('../graphics/particles/smoke_orange'),
-            'raccoon': import_folder('../graphics/particles/raccoon'),
-            'spirit': import_folder('../graphics/particles/nova'),
-            'bamboo': import_folder('../graphics/particles/bamboo')}
+            'squid': import_folder(SQUID_D),
+            'raccoon': import_folder(RACCOON_D),
+            'spirit': import_folder(SPIRIT_D),
+            'bamboo': import_folder(BAMBOO_D)}
 
 
     def create_particles(self, animation_type, pos, groups):
@@ -32,8 +33,8 @@ class ParticleEffect(pygame.sprite.Sprite):
     """Класс-шаблон для создания партикла"""
     def __init__(self, pos, animation_frames, groups):
         super().__init__(groups)
-        self.frame_index = 0
-        self.animation_speed = 0.15
+        self.frame_index = FRAME_IND
+        self.animation_speed = FRAME_SPEED
         self.frames = animation_frames
         self.image = self.frames[self.frame_index]
         self.rect = self.image.get_rect(center = pos)

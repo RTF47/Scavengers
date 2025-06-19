@@ -15,7 +15,7 @@ class Player(Entity):
             destroy_attack: Метод, разрушающий атаку.
         """
         super().__init__(groups)
-        self.image = pygame.image.load('../graphics/player/down_idle/idle_down.png').convert_alpha()
+        self.image = pygame.image.load(PLAYER_IMG).convert_alpha()
         self.rect = self.image.get_rect(topleft=pos)
         self.hitbox = self.rect.inflate(-6,-26)
 
@@ -28,7 +28,7 @@ class Player(Entity):
 
         #Переменные для обработки атаки игрока
         self.attacking = False
-        self.attack_cooldown = 400
+        self.attack_cooldown = ATTACK_CD
         self.attack_time = None
         self.create_attack = create_attack
 
@@ -37,21 +37,21 @@ class Player(Entity):
         self.weapon = list(weapon_data.keys())[self.weapon_status]
         self.can_weap_change = True
         self.weapon_change_time = None
-        self.change_cooldown = 200
+        self.change_cooldown = CHANGE_CD
 
         #Главные параметры
-        self.properties = {'health':6, 'energy':60,'attack':10, 'speed':6}
+        self.properties = {'health':HEALTH, 'attack':POWER, 'speed':P_SPEED}
         self.health = self.properties['health']
         self.speed = self.properties['speed']
 
         #Переменные для кулдауна
         self.vulnarable = True
         self.hurt_time = None
-        self.invulnarability_duration = 500
+        self.invulnarability_duration = INVULN_CD
 
         #Звуки
-        self.weapon_attack_sound = pygame.mixer.Sound('../audio/sword.wav')
-        self.attack_sound_volume = 0.2
+        self.weapon_attack_sound = pygame.mixer.Sound(SWORD_S)
+        self.attack_sound_volume = SWORD_V
         self.weapon_attack_sound.set_volume(self.attack_sound_volume)
 
         #Наличие руны в инвентаре
@@ -60,7 +60,7 @@ class Player(Entity):
 
     def import_player_assets(self):
         """Импортируем спрайты (ассеты) для анимации игрока"""
-        character_path = '../graphics/player/'
+        character_path = PLAYER_PATH
         self.animations = {
             'up':[], 'down':[], 'left':[], 'right':[],
             'right_idle':[], 'left_idle':[], 'down_idle':[], 'up_idle':[],
@@ -154,7 +154,7 @@ class Player(Entity):
 
         self.frame_index += self.frame_animation_speed
         if self.frame_index >= len(animation):
-            self.frame_index = 0
+            self.frame_index = FRAME_IND
 
         self.image = animation[int(self.frame_index)]
         self.rect = self.image.get_rect(center = self.hitbox.center)

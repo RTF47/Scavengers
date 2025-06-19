@@ -33,8 +33,8 @@ class Level:
     def create_map(self):
         """Создает игровой мир из csv файлов, размещает объекты и персонажей."""
         layouts = {
-            'boundary': import_csv_layout('../map/map_Boundary.csv'), #Карта границ
-            'entities': import_csv_layout('../map/map_Entitys.csv') #Карта энтити
+            'boundary': import_csv_layout(BOUNDARY_CSV), #Карта границ
+            'entities': import_csv_layout(ENTITY_CSV) #Карта энтити
         }
 
 
@@ -42,23 +42,23 @@ class Level:
             for row_index, row in enumerate(layout):
                 for col_index, col in enumerate(row):
 
-                    if col != '-1':
+                    if col != NOTHING_ID:
                         x = col_index * TILE_SIZE
                         y = row_index * TILE_SIZE
                         if style == 'boundary':
                             #Создание невидимых препятствий
                             Tile((x, y), [self.obstacle_sprites], 'invisible')
                         if style == 'entities':
-                            if col == '394': #Идентификатор игрока
+                            if col == PLAYER_ID: #Идентификатор игрока
                                 self.player = Player((x, y), [self.visible_sprites], self.obstacle_sprites, self.create_attack, self.destroy_attack)
                             else: #Идентификаторы врагов
-                                if col == '390': monster_name = 'bamboo'
-                                elif col == '391': monster_name = 'spirit'
-                                elif col == '392': monster_name = 'raccoon'
+                                if col == BAMBOO_ID: monster_name = 'bamboo'
+                                elif col == SPIRIT_ID: monster_name = 'spirit'
+                                elif col == RACCOON_ID: monster_name = 'raccoon'
                                 else: monster_name = 'squid'
                                 Enemy(monster_name, (x, y), [self.visible_sprites, self.attackable_sprites], self.obstacle_sprites, self.damage_player, self.trigger_death_particles)
         #Создание сундука в фиксированной позиции
-        self.chest = Chest(1216, 1792)
+        self.chest = Chest(CHEST_POS[0],CHEST_POS[1])
         self.visible_sprites.add(self.chest)
         self.obstacle_sprites.add(self.chest)
 
@@ -112,7 +112,7 @@ class Level:
 
     def chest_opening(self):
         """Обрабатывает логику открытия сундука и появления руны"""
-        if self.attackable_sprites:
+        if not self.attackable_sprites:
             if not self.chest.is_opened:
                 self.chest.is_opened = True
                 self.chest.animation_index = 0
@@ -150,16 +150,12 @@ class YSortCameraGroup(pygame.sprite.Group):
         self.offset = pygame.math.Vector2(100,200) #Смещение камеры
 
         #Загрузка фонового изображения
-        self.floor_surf = pygame.image.load('../graphics/tilemap/Map3.png').convert()
-        self.floor_rect = self.floor_surf.get_rect(topleft = (0,0))
+        self.floor_surf = pygame.image.load(MAP).convert()
+        self.floor_rect = self.floor_surf.get_rect(topleft = OVERLAY_POS)
 
 
     def custom_draw(self, player):
-        """Отрисовывает все спрайты группы с учетом позиции игрока (камеры).
 
-        Args:
-            player (Player): Объект игрока для центрирования камеры.
-        """
         #Расчет смещения камеры
         self.offset.x = player.rect.centerx - self.half_width
         self.offset.y = player.rect.centery - self.half_height
