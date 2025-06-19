@@ -2,41 +2,54 @@
 import pygame, sys, json, os
 from settings import *
 from level import Level
+<<<<<<< HEAD
 from timer import Timer                 # добавили импорт таймера
+=======
+from timer import Timer
+>>>>>>> 0dc85bd (Добавление комментариев)
 from leaderboard2 import Leaderboard
 
 
 class Game:
-    def __init__(self, state_status = 'reg'):  # по умолчанию — режим регистрации
+    def __init__(self, state_status = 'reg'):
+        """Класс, определяющий всю игру и состояния
+        Args:
+            state_status (reg): Начальное состояние при запуске игры.
+        """
         pygame.init()
         pygame.display.set_caption("SCAVENGERS")
         logo = pygame.image.load('../graphics/runes/6-32x32.png')
         pygame.display.set_icon(logo)
+
+        # Устанавливаем статус или же сценарий для простой стейт машины
         self.state_status = state_status
+        # Проверка, зарегистрировался ли пользователь, если да - то сразу пустить в меню
         if os.path.exists('leaderboard.json'):
             self.state_status = 'menu'
 
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.clock = pygame.time.Clock()
         self.level = None
-        self.finish_zone = pygame.Rect(1280, 640, 128, 128)
+        self.finish_zone = pygame.Rect(1280, 640, 128, 128) #Зона завершения уровня
 
-        # ——— НОВЫЕ ПОЛЯ ДЛЯ РЕГИСТРАЦИИ ———
-        self.username = None
-        self.name_taken = False
-        self.input_name = ''
-        self.name_active = True
+        # Переменные для регистрации пользователей
+        self.username = None #Имя игрока
+        self.name_taken = False #Занято ли имя
+        self.input_name = '' #Имя, которое игрок вводит в момент регистарции
+        self.name_active = True #Написано ли имя в поле регистрации
 
         # Шрифты
         font = pygame.font.Font('../graphics/font/alagard-12px-unicode.ttf', 120)
         self.font_small = pygame.font.Font('../graphics/font/joystix.ttf', 30)
+
+        # Определяем центральную точку нашего экрана
         self.center_x = WIDTH // 2
         self.center_y = HEIGHT // 2
 
-        # ——— НОВЫЙ ТАЙМЕР ———
+        # Добавляем таймер
         self.timer = Timer()
 
-        # ——— ЛИДЕРБОРД ———
+        # Добавляем лидерборд для отображения лучшего времени прохождения
         self.leaderboard = Leaderboard()
         # позиции для leaderboard
         self.lb_x = 800
@@ -55,7 +68,7 @@ class Game:
         self.game_over_sound = pygame.mixer.Sound('../audio/death.wav')
         self.game_over_sound.set_volume(0.4)
 
-        # Кнопки и картинки
+        # Кнопки и их картинки
         self.title_text = font.render("SCAVENGERS", True, (255, 255, 255))
         self.title_rect = self.title_text.get_rect(center=(self.center_x, self.center_y - 120))
         self.play_image   = pygame.image.load('../graphics/buttons/Play.png').convert_alpha()
@@ -69,34 +82,34 @@ class Game:
         self.replay_rect  = self.replay_image.get_rect()
         self.menu_rect    = self.menu_image.get_rect()
 
+
     def run(self):
+        """Здесь происходит обработка смен состояний, а также запуск всех процессов."""
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
 
-                # Регистрация
-                if self.state_status == 'reg':
-                    self.handle_reg_events(event)
-                # Общая проверка ESC для паузы (как было)
-                elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+
+
+                # Общая проверка ESC для паузы
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     if self.state_status == 'play':
                         self.timer.pause()           # ставим таймер на паузу
                         self.state_status = 'pause'
 
-                # Обычные состояния
-                if self.state_status == 'menu':
+                # Обработка событий для состояния регистрации
+                if self.state_status == 'reg':
+                    self.handle_reg_events(event)
+                # Обработка событий для состояния меню
+                elif self.state_status == 'menu':
                     self.handle_menu_events(event)
-                elif self.state_status == 'play':
-                    self.handle_play_events(event)
-                elif self.state_status == 'pause':
-                    # в pause_st() мы уже вешаем свой цикл
-                    pass
+                # Обработка событий для состояния окончания игры (проигрыш/победа)
                 elif self.state_status in ('game_over', 'win'):
                     self.handle_game_over_events(event)
 
-            # Отрисовка / логика
+            # Отрисовка / логика для каждого из состояний (уже после обработки событий)
             if self.state_status == 'reg':
                 self.reg_st()
             elif self.state_status == 'menu':
@@ -116,8 +129,11 @@ class Game:
             self.clock.tick(FPS)
 
 
-    # === РЕГИСТРАЦИЯ ===
     def handle_reg_events(self, event):
+        """Обработка событий регистрации
+        Args:
+            event: Событие в игре.
+        """
         if event.type == pygame.KEYDOWN and self.name_active:
             if event.key == pygame.K_RETURN and self.input_name.strip():
                 self.username = self.input_name.strip()
@@ -153,6 +169,7 @@ class Game:
 
 
     def reg_st(self):
+        """Отрисовка регистрации"""
         self.screen.fill((30, 30, 30))
         prompt = self.font_small.render("Введите имя:", True, (255, 255, 255))
         name_surf = self.font_small.render(self.input_name, True, (255, 255, 0))
@@ -164,8 +181,11 @@ class Game:
             self.screen.blit(warn, (100, 200))
 
 
-    # === МЕНЮ (ВАШЕ СОХРАНЁННОЕ) ===
     def handle_menu_events(self, event):
+        """Обработка событий и логики для меню
+        Args:
+            event: Событие в игре.
+        """
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             mouse_pos = pygame.mouse.get_pos()
             if self.play_rect.collidepoint(mouse_pos):
@@ -180,6 +200,7 @@ class Game:
 
 
     def draw_menu(self):
+        """Рисуем меню и его элементы"""
         self.screen.fill((50, 50, 50))
         self.screen.blit(self.title_text, self.title_rect)
         self.play_image = pygame.transform.scale(self.play_image, (250, 64))
@@ -233,19 +254,14 @@ class Game:
 
 
     def create_level(self):
+        """Создание таймера и старт уровня С САМОГО НАЧАЛА"""
         self.timer = Timer()
         self.timer.start()
         return Level()
 
 
-    # === ИГРА ===
-    def handle_play_events(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.KEYDOWN:
-            # ваш existing logic, например атаки
-            pass  # оставляем без изменений
-
-
     def play_st(self):
+        """Запуск уровня (обычно после паузы) + Вывод таймера сверху справа + проверка победы"""
         self.screen.fill(WATER_COLOR)
         if self.level:
             self.level.run()
@@ -263,8 +279,8 @@ class Game:
             self.state_status = 'win'
 
 
-    # === ПАУЗА ===
     def pause_st(self):
+        """Собственная обработка событий для паузы (для корректной работы) + Отрисовка паузы"""
         keys = pygame.key.get_pressed()
         # сохраняем экран и фон
         saved = self.screen.copy()
@@ -296,12 +312,14 @@ class Game:
 
 
     def overlay(self):
+        """Затемнение для паузы, проигрыша и победы"""
         overlay = pygame.Surface(self.screen.get_size(), pygame.SRCALPHA)
         overlay.fill((0, 0, 0, 150))
         self.screen.blit(overlay, (0, 0))
 
-    # === ПОБЕДА ===
+
     def win_st(self):
+        """Отрисовка победы и запись времени для лидерборда"""
         if self.level:
             self.level.run(draw_only=True)
 
@@ -345,7 +363,10 @@ class Game:
 
 
     def handle_game_over_events(self, event):
-        """Обработка кликов в режиме 'game_over'"""
+        """Обработка событий для проигрыша/победы
+        Args:
+            event: Событие в игре.
+        """
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             mouse_pos = event.pos
             if self.replay_rect.collidepoint(mouse_pos):
@@ -360,7 +381,7 @@ class Game:
 
 
     def game_over_st(self):
-        """Создание кнопок после проигрыша"""
+        """Отрисовка проигрыша"""
         if self.level:
             self.level.run(draw_only=True)
 
