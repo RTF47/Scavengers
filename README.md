@@ -59,8 +59,8 @@ python main.py
 ## 📸 Скриншоты
 
 <div align="center">
-  <img src="screenshots/gameplay1.png" width="45%">
-  <img src="screenshots/menu.png" width="45%">
+  <img src="screenshots/menu.png" width="49%">
+  <img src="screenshots/gameplay1.png" width="49%">
 </div>
 
 ---
